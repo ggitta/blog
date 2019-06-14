@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'jfsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog',
-        'USER': 'root',
-        'PASSWORD': 'AsdZq123..',
-        'HOST': '47.101.132.153',
-        'PORT': '3306',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -123,14 +123,14 @@ USE_TZ = False
 STATICFILES_DIRS = (os.path.join('static'),)
 STATIC_URL = '/static/'
 
-ACCESS_KEY="O0Vxoz2InB_A8ytZuCQsj-VohmYv8DgHPuLI3mQ5"
-SECRET_KEY="MVrj2iy96hhYv6-L18Uarbq7-FHIuu1-5QzQT4Sb"
-PERURL="http://ps5ivsz38.bkt.clouddn.com/"
-BKNAME="jfblog"
+ACCESS_KEY=""
+SECRET_KEY=""
+PERURL=""
+BKNAME=""
 
 EMAIL_HOST = 'smtp.qq.com' # smtp 地址（这里需要注意，如果你和我一样使用 163 邮箱的话，默认 smtp 功能是关闭的，需要去设置开启，并生成一个一次性密码用于连接 smtp 服务）
-EMAIL_HOST_USER = 'blog@javafeng.com' # 用户
-EMAIL_HOST_PASSWORD = 'liorkwgospmwjgda' # 密码
+EMAIL_HOST_USER = '' # 用户
+EMAIL_HOST_PASSWORD = '' # 密码
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True # 与SMTP服务器通信时，是否启动TLS链接(安全链接)。默认是false
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
