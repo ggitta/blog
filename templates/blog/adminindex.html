@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>JAVAFENG</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-12 p-3" id="content-main">
+            <p class="list-item">
+               [<a href="/adminarticles">文章管理</a>]
+            </p>
+            <p class="list-item">
+               [<a href="#">评论管理</a>]
+            </p>
+            <p class="list-item">
+                [<a href="#">分类管理</a>]
+            </p>
+            <p class="list-item">
+               [<a href="#">订阅管理</a>]
+            </p>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script>
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;//获取页面可见高度
+        document.getElementById("content-main").style.height = h + "px";//掐头去尾，减去100px
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta charset="UTF-8">
+    <meta name="author" content="javafeng">
+    <meta name="keywords" content="javafeng,Javafeng,JAVAFENG,翟亚峰">
+    <meta name="fragment" content="!">
+    <title>JAVAFENG - 边学习边积累</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/prism.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-md-7 p-3" id="content-main">
+            <p class="list-item p-0">
+            <span class="title"><img class="m-0" width="33" height="33" src="/static/images/logo-sm.png"
+                                     alt="JAVAFENG-LOGO">
+                <span style="line-height: 33px">
+                    -
+                JAVAFENG
+                </span>
+            </span>
+            </p>
+            <hr>
+            <p class="list-item">
+                全站共{{ blog }}篇文章，{{ cate }}个分类，{{ tag }}个标签，{{ ips }}个<a href="javascript:getips()">ip</a>访问过本站。
+            </p>
+            <p class="list-item">
+            </p>
+            <hr>
+            <p class="list-item">
+{#                [<a class="text-dp" href="javascript:toggleSea()">查询</a>]#}
+                <a class="text-dp mr-3" href="javascript:toggleRss()"><i class="fa fa-rss mr-2"></i>订阅本站</a>
+                <a href="/articles"><i class="fa fa-book mr-2"></i>全部文章</a>
+                {#                [<a href="/archive">归档</a>]#}
+                {#                [<a href="/articles">留言</a>]#}
+            </p>
+{#            <p class="list-item form-inline" style="display: none" id="seap">#}
+{#                <input type="text" id="tags" name="tags" style="width: calc(100% - 50px)" class="form-control mb-3"#}
+{#                       placeholder="查询">[<a#}
+{#                    href="/articles">查询</a>]#}
+{#            </p>#}
+            <p class="list-item form-inline" style="display: none" id="rssp">
+                <input type="text" id="rssinp" name="tags" style="width: calc(100% - 50px)" class="form-control mb-3"
+                       placeholder="订阅"><a
+                    href="javascript:addrss()">订阅</a>
+            <div>
+                <small id="rsstip" style="display: none;color: #FF0000;"></small>
+            </div>
+            </p>
+            <hr>
+            <div class="list-item p">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 text-left p-0">
+                            <p><i class="fa fa-fw fa-envelope mr-2"></i>Email：blog@javafeng.com</p>
+                            <p><i class="fa fa-fw fa-qq mr-2"></i>QQ：<a href="tencent://message/?uin=2210036996&Site=Sambow&Menu=yes">2210036996</a></p>
+                            <p><i class="fa fa-fw fa-github mr-2"></i>Github：<a href="https://github.com/ggitta">GGITTA</a></p>
+                            <p><i class="fa fa-fw fa-weibo mr-2"></i>Weibo：<a href="https://weibo.com/u/5764656413">J57F</a></p>
+                            <p><i class="fa fa-fw fa-phone mr-2"></i>phone：<a href="javascript:getphone()">138****6320</a></p>
+                        </div>
+                        <div class="col-md-6 text-left p-0">
+                            <p><i class="fa fa-fw fa-wechat mr-2"></i>Wechat：j1392670234</p>
+                            <img style="width: 130px;height: 130px;" src="/static/images/qrcode.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item p pt-3">
+                <p><i class="fa fa-fw fa-tags mr-2"></i>我的标签↓</p>
+                <hr>
+            </div>
+            <p class="list-item">
+                {% for tag in tags %}
+                    <span class="jftag">{{ tag }}</span>
+                {% endfor %}
+            </p>
+        </div>
+        <div class="col-md-5">
+            <div class="list-item p  pt-3">
+                <p><i class="fa fa-fw fa-book mr-2"></i>最热文章↓</p>
+                <hr>
+            </div>
+            {% for blog in blogs %}
+                <p class="list-item-1-line">
+                    <a href="/toblog/{{ blog.id }}">{{ blog.name }}</a>
+                </p>
+            {% endfor %}
+            <div class="list-item p  pt-3">
+                <p><i class="fa fa-fw fa-comments mr-2"></i>最新评论↓</p>
+                <hr>
+            </div>
+            {% if cmts %}
+                {% for cmt in cmts %}
+                    <p class="list-item-1-line">
+                        {{ cmt.name }}：{{ cmt.content }}
+                    </p>
+                {% endfor %}
+            {% else %}
+                There is nothing!
+            {% endif %}
+            <div class="list-item p">
+                <hr>
+            </div>
+            {% if error %}
+                <p class="list-item">
+                <hr>
+                </p>
+                <p class="list-item">
+                    <span class="text-dp">{{ error }}</span>
+                </p>
+            {% endif %}
+            <p class="list-item">
+                <a href="https://icp.chinaz.com/javafeng.com" target="blank">
+                    &copy;2019 JAVAFENG-津ICP备18005168号-2
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="vfcode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px !important;">
+            <div class="modal-body">
+                <h3 class="mp-3" id="msg"></h3>
+                <div class="text-right">
+                    <div id="v_container" style="width: calc(50% + 50px);height: 50px;"></div>
+                    <input type="text" class="form-control" id="code_input" value="" placeholder="请输入验证码"/>
+                    <small id="vfcodetip" style="display: none;color: red">验证码输入错误</small>
+                    <a style="cursor: pointer" id="my_button">获取手机号中四位</a>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="msgmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px !important;">
+            <div class="modal-body">
+                <h3 class="mp-3">所有访问IP查询成功</h3>
+                请移至浏览器控制台查看。
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/prism.js"></script>
+<script src="/static/js/gVerify.js"></script>
+<script src="/static/js/home.js"></script>
+</body>
+</html>

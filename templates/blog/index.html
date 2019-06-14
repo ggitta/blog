@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>JAVAFENG</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body style="overflow: hidden">
+<div class="container-fluid m-0 p-0">
+    <div class="row p-0 m-0">
+        <div class="col-3 p-0 m-0">
+            <div class="bg-dark text-white">
+                <div id="shell" class="shell">
+                    <div class="copr">
+                        &copy;2019 JAVAFENG-津ICP备18005168号-2
+                    </div>
+                    <div class="shell-hr"> </div>
+                    <div id="shell-history" class="shell-history">
+                        <div id="first"></div>
+                    </div>
+                    <div class="shell-input">
+                        <textarea id="shell-textarea" class="shell-textarea"
+                             placeholder="Enter the command here..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9 p-0">
+            <div class="framehide" id="framehide">
+                Loading......
+            </div>
+            <iframe id="mainframe" frameborder="0" width="100%" height="100%" scrolling="auto"
+                    title="mainframe"
+                    src="/shell">
+            </iframe>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/cmd.js"></script>
+<script>
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;//获取页面可见高度
+        document.getElementById("shell").style.height = h + "px";//掐头去尾，减去100px
+    }
+</script>
+</body>
+</html>

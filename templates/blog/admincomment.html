@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>JAVAFENG</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-12 p-3" id="content-main">
+            <p class="list-item">
+                内容：文章列表&emsp;[<a href="/adminindex">管理首页</a>] [<a href="/toblogadd">写新文章</a>]|[<a href="javascript:editatten()">编辑模式</a>]
+            </p>
+            <p class="list-item">
+               序号. [唯一标识|浏览量|喜欢数|评论数|作者|时间]标题
+            </p>
+            <p class="list-item">
+               <hr />
+            </p>
+            {% if blogs %}
+                {% for blog in blogs %}
+                    <p class="list-item">
+                        <span class="editbutton" style="display: none">[<a href="/toblogadd">删除</a>] [<a href="/toblogadd">编辑</a>]</span>
+                        [{{ blog.viewcount}}|{{ blog.like }}|{{ blog.commentcount }}|{{ blog.author }}|{{ blog.addtime|date:"Y/m/d H:i" }}]<a href="/toblog/{{ blog.id }}">{{ blog.name }}</a>
+                    </p>
+                {% endfor %}
+            {% else %}
+                <p class="list-item">
+                    There is nothing!
+                </p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script>
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+    
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;//获取页面可见高度
+        document.getElementById("content-main").style.height = h + "px";//掐头去尾，减去100px
+    }
+    function editatten() {
+        $(".editbutton").fadeToggle(100)
+    }
+</script>
+</body>
+</html>

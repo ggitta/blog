@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>JAVAFENG</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-12 p-3" id="content-main">
+            <div class="list-item p">
+                <span class="title">Blogs | 博客 </span>
+            </div>
+            <div id="top_tag_cate" style="display: none">
+                <div class="list-item p">
+                    {% if nowcate == "all" %}
+                        <a  class="jftagactive"  href="javascript:change('all', '{{ nowtag }}',1)">全部分类</a>
+                    {% else %}
+                        <a  class="jftag"  href="javascript:change('all', '{{ nowtag }}',1)">全部分类</a>
+                    {% endif %}
+
+                    {% for cate in cates %}
+                        {% if cate.id == nowcate %}
+                            <a  class="jftagactive"
+                                href="javascript:change('{{ cate.id }}','{{ nowtag }}',1)">{{ cate.name }}（{{ cate.blogcount }}）</a>
+                        {% else %}
+                            <a  class="jftag"  href="javascript:change('{{ cate.id }}','{{ nowtag }}',1)">{{ cate.name }}（{{ cate.blogcount }}）</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div style="font-size: 12px;" class="list-item p">
+                    {% if nowtag == "all" %}
+                        <a class="jftagactive" href="javascript:change('{{ nowcate }}','all',1)">全部标签</a>
+                    {% else %}
+                        <a class="jftag" href="javascript:change('{{ nowcate }}','all',1)">全部标签</a>
+                    {% endif %}
+                    {% for tag in tags %}
+                        {% if tag == nowtag %}
+                            <a class="jftagactive"
+                               href="javascript:change('{{ nowcate }}','{{ tag }}',1)">{{ tag }}</a>
+                        {% else %}
+                            <a class="jftag" href="javascript:change('{{ nowcate }}','{{ tag }}',1)">{{ tag }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="list-item p">
+                <hr/>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 p-0">
+                        <div id="blogs">
+                            {% if blogs %}
+                                <div class="row p-0 m-0">
+                                    {% for blog in blogs %}
+                                        <div class="col-md-12 mb-3 p-0">
+                                            <div class="line1" class="list-item p">
+                                                <a data-toggle="tooltip" data-placement="top" title="{{ blog.name }}"
+                                                   href="/toblog/{{ blog.id }}">{{ blog.name }}</a>
+                                            </div>
+                                            <div class="list-item  p">
+                                                [<span
+                                                    class="details">{{ blog.viewcount }}浏览|{{ blog.commentcount }}评论|</span>{{ blog.addtime|date:"Y/m/d H:i" }}]
+                                            </div>
+                                            <p class="list-item">
+                                            <hr>
+                                            </p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="pagination pl-3">
+                                    <span class="step-links">
+                                        {% if pgs.has_previous %}
+                                            <a href="javascript:change('{{ nowcate }}','{{ nowtag }}',{{ pgs.previous_page_number }})">&lt;&lt;上一页</a>
+                                        {% endif %}
+                                        <span class="current">
+                                             {{ pgs.number }} / {{ pgs.paginator.num_pages }}
+                                        </span>
+                                        {% if pgs.has_next %}
+                                            <a href="javascript:change('{{ nowcate }}','{{ nowtag }}',{{ pgs.next_page_number }})">下一页&gt;&gt;</a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% else %}
+                                <div class="list-item p">
+                                    There is nothing!
+                                </div>
+                            {% endif %}
+                            <div class="list-item p">
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="col-md-3 right_tag_cate">
+                        <div class="list-item p">
+                            {% if nowcate == "all" %}
+                                <p><a class="text-dp" href="javascript:change('all', '{{ nowtag }}',1)">全部分类</a> <p>
+                                {% else %}
+                                <p><a href="javascript:change('all', '{{ nowtag }}',1)">全部分类</a> <p>
+                            {% endif %}
+                            {% for cate in cates %}
+                                {% if cate.id == nowcate %}
+                                    <p><a class="text-dp"
+                                          href="javascript:change('{{ cate.id }}','{{ nowtag }}',1)">{{ cate.name }}（{{ cate.blogcount }}）</a>
+                                    <p>
+                                        {% else %}
+                                    <p><a href="javascript:change('{{ cate.id }}','{{ nowtag }}',1)">{{ cate.name }}（{{ cate.blogcount }}）</a>
+                                    <p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-3 right_tag_cate">
+                        <div style="font-size: 12px;" class="list-item p">
+                            {% if nowtag == "all" %}
+                                <a class="jftagactive" href="javascript:change('{{ nowcate }}','all',1)">全部标签</a>
+                            {% else %}
+                                <a class="jftag" href="javascript:change('{{ nowcate }}','all',1)">全部标签</a>
+                            {% endif %}
+                            {% for tag in tags %}
+                                {% if tag == nowtag %}
+                                    <a class="jftagactive"
+                                       href="javascript:change('{{ nowcate }}','{{ tag }}',1)">{{ tag }}</a>
+                                {% else %}
+                                    <a class="jftag"
+                                       href="javascript:change('{{ nowcate }}','{{ tag }}',1)">{{ tag }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="list-item p">
+                &copy;2019 JAVAFENG-津ICP备18005168号-2
+            </div>
+        </div>
+    </div>
+</div>
+<div  data-toggle="tooltip" data-placement="left" title="回首页" id="btntop1" class="btntop4">
+    <a href="/">
+    <i class="fa fa-fw fa-home btna"  style="line-height: 30px"></i></a>
+</div>
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/poppor.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function change(cate, tag, page) {
+        console.log(cate + " " + tag)
+        window.location.href = "/articles?cate=" + cate + "&tag=" + tag + "&page=" + page
+    }
+
+    window.onload = function () {
+        changeDivHeight();
+    }
+
+    window.onresize = function () {
+        changeDivHeight();
+    }
+
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;//获取页面可见高度
+        document.getElementById("content-main").style.height = h + "px";//掐头去尾，减去100px
+
+        var w = document.documentElement.clientWidth;
+        if (w < 768) {
+            $("#top_tag_cate").show();
+            $(".right_tag_cate").hide();
+        } else {
+            $("#top_tag_cate").hide();
+            $(".right_tag_cate").show();
+        }
+    }
+
+    function editatten() {
+        $(".details").fadeToggle(100)
+    }
+</script>
+</body>
+</html>

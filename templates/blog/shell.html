@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>JAVAFENG</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/prism.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-12 p-3" id="content-main">
+            <p class="list-item">
+               <h2>JAVAFENG</h2>
+            </p>
+            <hr>
+            <p class="list-item">
+                全站共{{ blog }}篇文章，{{ cate }}个分类，{{ tag }}个标签，{{ ips }}个ip访问过本站。
+            </p>
+            {% if error %}
+                <hr>
+                <span style="color: red">{{ error }}</span>
+            {% endif %}
+            <hr>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/prism.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;//获取页面可见高度
+        document.getElementById("content-main").style.minHeight = h + "px";//掐头去尾，减去100px
+    }
+</script>
+</body>
+</html>

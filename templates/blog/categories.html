@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>《{{ blog.name }}》- JAVAFENG</title>
+    <link rel="stylesheet" href="/static/css/prism.css">
+    <link href="https://cdn.bootcss.com/prism/1.15.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-md-8 p-3" id="content-main">
+            <p class="list-item">
+            <span class="title">
+                {{ blog.name }}
+            </span>
+                [<a href="/">首页</a>] [<a href="#cmtmain">去评论</a>]
+            </p>
+            <p class="list-item">
+            <hr/>
+
+            </p>
+                <pre class="line-numbers language-python" style="white-space: pre-wrap;"><code class=" language-python"><span
+                        class="token comment"># 查看docker swarm service服务</span>
+<span class="token keyword">def</span> <span class="token function">show_service</span><span
+                            class="token punctuation">(</span>service_id<span class="token operator">=</span><span
+                            class="token boolean">None</span><span class="token punctuation">,</span>service_name<span
+                            class="token operator">=</span><span class="token boolean">None</span><span
+                            class="token punctuation">)</span><span class="token punctuation">:</span>
+    url <span class="token operator">=</span> <span class="token string">"http://%s/%s/services"</span>  <span
+                            class="token operator">%</span> <span class="token punctuation">(</span>docker_swarm_ip_port<span
+                            class="token punctuation">,</span> docker_swarm_api_version<span
+                            class="token punctuation">)</span>
+    r <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span
+                            class="token punctuation">(</span>url<span class="token punctuation">)</span>
+    results<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>status_code <span
+                            class="token operator">==</span> <span class="token number">200</span><span
+                            class="token punctuation">:</span>
+        result <span class="token operator">=</span> json<span class="token punctuation">.</span>loads<span
+                            class="token punctuation">(</span>r<span class="token punctuation">.</span>text<span
+                            class="token punctuation">)</span>
+        <span class="token keyword">for</span> item <span class="token keyword">in</span> result<span
+                            class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span>item<span
+                            class="token punctuation">)</span>
+            <span class="token comment">#+" "+item["Endpoint"].get(0)["Ports"]["TargetPort"])</span>
+            ID<span class="token operator">=</span>item<span class="token punctuation">[</span><span
+                            class="token string">"ID"</span><span class="token punctuation">]</span>
+            Name<span class="token operator">=</span>item<span class="token punctuation">[</span><span
+                            class="token string">"Spec"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token string">"Name"</span><span
+                            class="token punctuation">]</span>
+            Rep<span class="token operator">=</span>item<span class="token punctuation">[</span><span
+                            class="token string">"Spec"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token string">"Mode"</span><span
+                            class="token punctuation">]</span><span class="token punctuation">[</span><span
+                            class="token string">"Replicated"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token string">"Replicas"</span><span
+                            class="token punctuation">]</span>
+            IP<span class="token operator">=</span>item<span class="token punctuation">[</span><span
+                            class="token string">"Endpoint"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token string">"VirtualIPs"</span><span
+                            class="token punctuation">]</span><span class="token punctuation">[</span><span
+                            class="token number">0</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token string">"Addr"</span><span
+                            class="token punctuation">]</span><span class="token punctuation">.</span>split<span
+                            class="token punctuation">(</span><span class="token string">'/'</span><span
+                            class="token punctuation">)</span><span class="token punctuation">[</span><span
+                            class="token number">0</span><span class="token punctuation">]</span>
+            vnc_TargetPort<span class="token operator">=</span>item<span class="token punctuation">[</span><span
+                            class="token string">"Endpoint"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token string">"Spec"</span><span
+                            class="token punctuation">]</span><span class="token punctuation">[</span><span
+                            class="token string">"Ports"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token number">0</span><span
+                            class="token punctuation">]</span><span class="token punctuation">[</span><span
+                            class="token string">"TargetPort"</span><span class="token punctuation">]</span>
+            vnc_PublishedPort<span class="token operator">=</span>item<span class="token punctuation">[</span><span
+                            class="token string">"Endpoint"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token string">"Spec"</span><span
+                            class="token punctuation">]</span><span class="token punctuation">[</span><span
+                            class="token string">"Ports"</span><span class="token punctuation">]</span><span
+                            class="token punctuation">[</span><span class="token number">0</span><span
+                            class="token punctuation">]</span><span class="token punctuation">[</span><span
+                            class="token punctuation">}</span>
+            results<span class="token punctuation">.</span>append<span class="token punctuation">(</span>msg<span
+                            class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"show error"</span><span
+                            class="token punctuation">)</span>
+    returnmsg<span class="token operator">=</span><span class="token punctuation">[</span><span
+                            class="token punctuation">]</span>
+    <span class="token keyword">if</span> service_id<span class="token operator">!=</span><span class="token boolean">None</span><span
+                            class="token punctuation">:</span>
+        <span class="token keyword">for</span> item <span class="token keyword">in</span> results<span
+                            class="token punctuation">:</span>
+            <span class="token keyword">if</span> item<span class="token punctuation">[</span><span
+                            class="token string">"ID"</span><span class="token punctuation">]</span><span
+                            class="token operator">==</span>service_id<span class="token punctuation">:</span>
+                returnmsg<span class="token punctuation">.</span>append<span class="token punctuation">(</span>item<span
+                            class="token punctuation">)</span>
+    <span class="token keyword">elif</span> service_name<span class="token operator">!=</span><span
+                            class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> item <span class="token keyword">in</span> results<span
+                            class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span>item<span
+                            class="token punctuation">[</span><span class="token string">"Name"</span><span
+                            class="token punctuation">]</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> item<span class="token punctuation">[</span><span
+                            class="token string">"Name"</span><span class="token punctuation">]</span><span
+                            class="token operator">==</span>service_name<span class="token punctuation">:</span>
+                returnmsg<span class="token punctuation">.</span>append<span class="token punctuation">(</span>item<span
+                            class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        returnmsg<span class="token operator">=</span>results
+
+    <span class="token keyword">return</span> returnmsg
+</code></pre>
+            <p id="cmtmain" class="list-item">
+                评论<span id="cmdbtn">[<a href="javascript:defcmt()">发评论</a>]</span>[<a href="javascript:editatten()">折叠或展开评论区</a>]
+            </p>
+            <hr/>
+            <div id="cmtarea">
+                {% if cmts %}
+                    {% for cmt in cmts %}
+                        <div id="con{{ cmt.id }}">
+                            <p class="list-item">
+                                {{ cmt.name }}[{{ cmt.addtime|date:"Y/m/d H:i" }}][<a
+                                    href="javascript:repcmt({{ cmt.id }})">回复</a>]
+                            </p>
+                            {% if cmt.repid %}
+                                <p class="list-item pl-2 cmtprep">
+                                    [回复][<a href="#con{{ cmt.repid }}">查看原评论</a>][{{ cmt.repemail }}]{{ cmt.repcnt }}
+                                </p>
+                            {% endif %}
+                            <p class="list-item pl-2 cmtp">
+                                {{ cmt.content | safe }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="list-item">
+                        There is nothing!
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cmt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px !important;">
+            <div class="modal-body">
+                <form id="cmtform" action="#" method="post">
+                    <h5>邮箱</h5>
+                    <input type="hidden" maxlength="100" name="rep" id="rep" list="browsers">
+                    <small id="emailreq" class="mb-3" style=";color: red"></small>
+                    <input type="text" maxlength="100" name="email" id="email" list="browsers"
+                           class="form-control mb-3">
+                    <input type="hidden" name="site" id="site" list="browsers" class="form-control mb-3">
+                    <h5>内容</h5>
+                    <small id="cntreq" class="mb-3" style="color: red"></small>
+                    <textarea maxlength="300" minlength="6" name="content" id="content"
+                              style="width: 100%;height: 100px;min-height: 80px" class="form-control mb-3"></textarea>
+                    <small id="cntreq" class="mb-3" style="color: red"></small>
+                    <div class="text-right">
+                        <a href="javascript: cmt()">提交</a>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/prism.js"></script>
+<script src="https://cdn.bootcss.com/prism/1.15.0/plugins/line-numbers/prism-line-numbers.js"></script>
+<script type="text/javascript">
+    $('pre').addClass("line-numbers");
+
+    function editatten() {
+        $("#cmtarea").fadeToggle(100)
+        $("#cmdbtn").fadeToggle(100)
+    }
+
+    function repcmt(id) {
+        $("#rep").val(id)
+        showcmt()
+    }
+
+    function defcmt() {
+        $("#rep").val(-1)
+        showcmt()
+    }
+
+    function cmt() {
+        rep = $("#rep").val()
+        email = $("#email").val().replace(/\s+/g, "")
+        site = $("#site").val()
+        content = $("#content").val().replace(new RegExp('\n', "gm"), '<br/>').replace(new RegExp(' ', "gm"), '&nbsp;');
+        console.log(content)
+        if (email == "") {
+            $("#email").focus()
+            $("#emailreq").html("请输入邮箱，以便在有人回复您时通知您")
+            $("#emailreq").show()
+        } else {
+            var regEmail = /^[a-zA-Z\d]+([-_\.][a-zA-Z\d]+)*@[a-zA-Z\d]+\.[a-zA-Z\d]{2,4}$/;
+            if (regEmail.test(email)) {
+                $("#emailreq").hide()
+                if (content == "" || content.length <= 6) {
+                    $("#content").focus()
+                    $("#cntreq").html("无内容或内容不符合要求，6-1000之间")
+                    $("#cntreq").show()
+                } else {
+                    $("#cntreq").hide()
+                }
+            } else {
+                $("#email").focus()
+                $("#emailreq").html("请输入正确邮箱")
+                $("#emailreq").show()
+            }
+        }
+        $.post("/addcmt", {blog:{{ blog.id }}, email: email, content: content, rep: rep, site: site}, function (r) {
+            r = eval("(" + r + ")")
+            if (r.state == 1) {
+                window.location.reload()
+            } else {
+
+            }
+        })
+    }
+
+    function showcmt() {
+        $("#cmt").modal()
+    }
+
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+
+    function gotop() {
+        $('html,body').animate({scrollTop: 0}, 0);
+    }
+
+    function changeDivHeight() {
+        var w = document.documentElement.clientWidth;
+        if (w < 768) {
+            $("#content-right").css({"position": '', "top": '', "z-index": ''});
+        } else {
+            $("#content-right").css({"position": "fixed", "top": "0px", "z-index": "999"});
+        }
+        var h = document.documentElement.clientHeight;
+        document.getElementById("content-main").style.minHeight = h + "px";
+
+        var rw = document.getElementById("content-right-div").clientWidth
+        document.getElementById("content-right").style.maxWidth = rw + "px";
+        document.getElementById("content-right").style.width = rw + "px";
+    }
+</script>
+</body>
+</html>

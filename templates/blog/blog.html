@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>{{ blog.name }} - {{ blog.category.name }} - JAVAFENG</title>
+    <meta name="author" content="javafeng">
+    <meta name="keywords" content="javafeng,Javafeng,JAVAFENG,翟亚峰,{{ blog.tag }}">
+    <meta name="fragment" content="!">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/prism.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-md-8 p-3" id="content-main">
+            <p class="list-item">
+            <span class="title">
+                {{ blog.name }}
+            </span>
+            </p>
+            <p class="list-item">
+            <hr/>
+            </p>
+            <div style="display: none" id="left-main">
+                <p class="list-item p-2" style="background: #F0F0F0;">
+                    <small style="color: deeppink">本文为原创，转载请标明原文地址：<br><a
+                            href="http://javafeng.com/toblog/{{ blog.id }}">http://www.javafeng.com/toblog/{{ blog.id }}</a>
+                    </small>
+                </p>
+                <p class="list-item">
+                    发布于{{ blog.addtime |date:"Y/m/d H:i" }}
+                </p>
+                <p class="list-item">
+                    {{ blog.viewcount }}次浏览，{{ commontcount }}条评论
+                </p>
+                <p class="list-item">
+                    属于 [{{ blog.category.name }}] 分类
+                </p>
+                <p class="list-item">
+                    {% for tag in tags %}
+                        <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </p>
+                <p class="list-item">
+                <hr>
+                </p>
+                <p class="list-item" id="tocm">
+                </p>
+            </div>
+            <div class="m-0 p-2">
+                {% if blog.htmlcontent %}
+                    {{ blog.htmlcontent|safe }}
+                {% else %}
+                    <p class="list-item">
+                        There is nothing!
+                    </p>
+                {% endif %}
+            </div>
+            <p id="cmtmain" class="list-item">
+                <i class="fa fa-comments mr-2"></i>评论↓<span id="cmdbtn">[<a href="javascript:defcmt()">写评论</a>]</span>
+            </p>
+            <hr/>
+            <div id="cmtarea">
+                {% if cmtsbefore %}
+                    {% for cmt in cmtsbefore %}
+                        <div id="con{{ cmt.id }}">
+                            <p class="list-item">
+                                {{ cmt.name }}[{{ cmt.addtime|date:"Y/m/d H:i" }}] [<a
+                                    href="javascript:repcmt({{ cmt.id }})">回复</a>]
+                                {% if cmt.repcount > 0 %}
+                                    [
+                                    <a href="javascript:$('#replist{{ cmt.id }}').toggle(150)">查看回复({{ cmt.repcount }})</a>
+                                    ]
+                                {% endif %}
+                            </p>
+                            {% if cmt.repid %}
+                                <p class="list-item pl-2 cmtprep">
+                                    [回复][<a href="#con{{ cmt.repid }}">查看原评论</a>][{{ cmt.repemail }}]{{ cmt.repcnt }}
+                                </p>
+                            {% endif %}
+                            <p class="list-item pl-2 cmtp">
+                                {{ cmt.content | safe }}
+                            </p>
+                            <div class="cmtpreplist" id="replist{{ cmt.id }}" style="display: none">
+                                {% if cmt.repcount > 0 %}
+                                    {% for rep in cmt.replist %}
+                                        <div id="con{{ rep.id }}">
+                                            <p class="list-item">
+                                                {{ rep.name }}[{{ rep.addtime|date:"Y/m/d H:i" }}] [<a
+                                                    href="javascript:repcmt({{ rep.id }})">回复</a>]
+                                            </p>
+                                            <p class="list-item pl-2 cmtp">
+                                                {{ rep.content | safe }}
+                                            </p>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p class="list-item">
+                        <hr>
+                        </p>
+                    {% endfor %}
+                {% else %}
+                    <p class="list-item">
+                        There is nothing!
+                    </p>
+                {% endif %}
+                <div style="display:none;" id="cmtafter">
+                    {% if cmtsafter %}
+                        {% for cmt in cmtsafter %}
+                            <div id="con{{ cmt.id }}">
+                                <p class="list-item">
+                                    {{ cmt.name }}[{{ cmt.addtime|date:"Y/m/d H:i" }}] [<a
+                                        href="javascript:repcmt({{ cmt.id }})">回复</a>]
+                                    {% if cmt.repcount > 0 %}
+                                        [
+                                        <a href="javascript:$('#replist{{ cmt.id }}').toggle(150)">查看回复({{ cmt.repcount }})</a>
+                                        ]
+                                    {% endif %}
+                                </p>
+                                {% if cmt.repid %}
+                                    <p class="list-item pl-2 cmtprep">
+                                        [回复][<a
+                                            href="#con{{ cmt.repid }}">查看原评论</a>][{{ cmt.repemail }}]{{ cmt.repcnt }}
+                                    </p>
+                                {% endif %}
+                                <p class="list-item pl-2 cmtp">
+                                    {{ cmt.content | safe }}
+                                </p>
+                                <div class="cmtpreplist" id="replist{{ cmt.id }}" style="display: none">
+                                    {% if cmt.repcount > 0 %}
+                                        {% for rep in cmt.replist %}
+                                            <div id="con{{ rep.id }}">
+                                                <p class="list-item">
+                                                    {{ rep.name }}[{{ rep.addtime|date:"Y/m/d H:i" }}] [<a
+                                                        href="javascript:repcmt({{ rep.id }})">回复</a>]
+                                                </p>
+                                                <p class="list-item pl-2 cmtp">
+                                                    {{ rep.content | safe }}
+                                                </p>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <p class="list-item">
+                            <hr>
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% if cmtsaftercount > 0 %}
+                    <div class="w-100 text-center">
+                        <a href="javascript:$('#cmtafter').toggle(150)">全部评论</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-4 p-3" id="right">
+            <div id="toctop">
+                <p class="list-item p-2" style="background: #F0F0F0;">
+                    <small style="color: deeppink">本文为原创，转载请标明原文地址：<br><a
+                            href="http://javafeng.com/toblog/{{ blog.id }}">http://www.javafeng.com/toblog/{{ blog.id }}</a>
+                    </small>
+                </p>
+                <p class="list-item">
+                    发布于{{ blog.addtime |date:"Y/m/d H:i" }}
+                </p>
+                <p class="list-item">
+                    {{ blog.viewcount }}次浏览，{{ commontcount }}条评论
+                </p>
+                <p class="list-item">
+                    属于 [{{ blog.category.name }}] 分类
+                </p>
+                <p class="list-item">
+                    {% for tag in tags %}
+                        <span class="jftag">{{ tag }}</span>
+                    {% endfor %}
+                </p>
+                <p class="list-item">
+                <hr>
+                </p>
+            </div>
+            <p class="list-item" id="toc">
+
+            </p>
+        </div>
+    </div>
+</div>
+<div data-toggle="tooltip" data-placement="left" title="回顶部" id="btntop" class="btntop1"><a href="javascript:gotop()">
+    <i class="fa fa-fw fa-arrow-up btna"></i></a>
+</div>
+<div data-toggle="tooltip" data-placement="left" title="回首页" id="btntop1" class="btntop2"><a  href="/">
+    <i class="fa fa-fw fa-home btna"></i></a>
+</div>
+<div  data-toggle="tooltip" data-placement="left" title="全部文章"  id="btntop2" class="btntop3"><a href="/articles">
+    <i class="fa fa-fw fa-book btna"></i></a>
+</div>
+<div data-toggle="tooltip" data-placement="left" title="去评论" id="btntop3" class="btntop4"><a
+                                      href="javascript:gotocitem('cmtmain')">
+    <i class="fa fa-fw fa-comments btna"></i></a>
+</div>
+<div class="modal fade" id="cmt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px !important;">
+            <div class="modal-body">
+                <form id="cmtform" action="#" method="post">
+                    <span>邮箱</span>
+                    <input type="hidden" maxlength="100" name="rep" id="rep" list="browsers">
+                    <small id="emailreq" class="mb-3" style=";color: red"></small>
+                    <input type="text" maxlength="100" name="email" id="email" list="browsers"
+                           class="form-control mb-3">
+                    <input type="hidden" name="site" id="site" list="browsers" class="form-control mb-3">
+                    <span>内容</span>
+                    <small id="cntreq" class="mb-3" style="color: red"></small>
+                    <textarea maxlength="300" minlength="6" name="content" id="content"
+                              style="width: 100%;height: 100px;min-height: 80px" class="form-control mb-3"></textarea>
+                    <small id="cntreq" class="mb-3" style="color: red"></small>
+                    <div class="text-right">
+                        <small style="display: none;color: red" id="cmterror">评论失败</small>
+                        <a id="subbtn" href="javascript: cmt()">提交</a>
+                        <i id="loadbtn" style="display: none" class="fa fa-spinner fa-spin"></i>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/poppor.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/prism.js"></script>
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    var height;
+    console.log("回眸一笑百媚生，六宫粉黛无颜色。")
+    $("h1,h2,h3,h4").each(function () {
+        tagName = $(this).prop("tagName")
+        text = $(this).text()
+        tagId = $(this).attr('id')
+        if (tagName == "H1") {
+            $("#tocm").append("<a class='text-dp'   href='javascript:gotocitem(\"" + tagId + "\")'>" + text + "</a><br>")
+            $("#toc").append("<a class='text-dp' href='javascript:gotocitem(\"" + tagId + "\")'>" + text + "</a><br>")
+        } else if (tagName == "H2") {
+            $("#tocm").append("<a  href='javascript:gotocitem(\"" + tagId + "\")'>·" + text + "</a><br>")
+            $("#toc").append("<a   href='javascript:gotocitem(\"" + tagId + "\")'>·" + text + "</a><br>")
+            {#$("#toc").append("<a href='#" + tagId + "'>·" + text + "</a><br>")#}
+        } else if (tagName == "H3") {
+            $("#tocm").append("<a  href='javascript:gotocitem(\"" + tagId + "\")'>··" + text + "</a><br>")
+            $("#toc").append("<a  href='javascript:gotocitem(\"" + tagId + "\")'>··" + text + "</a><br>")
+        } else {
+            $("#tocm").append("<a  href='javascript:gotocitem(\"" + tagId + "\")'>···" + text + "</a><br>")
+            $("#toc").append("<a  href='javascript:gotocitem(\"" + tagId + "\")'>···" + text + "</a><br>")
+        }
+    })
+
+    function gotocitem(id) {
+        $('html, body').animate({
+            scrollTop: $("#" + id).offset().top
+        }, 150);
+    }
+
+    $('pre').addClass("line-numbers");
+
+    function editatten() {
+        $("#cmtarea").fadeToggle(100)
+        $("#cmdbtn").fadeToggle(100)
+    }
+
+    function repcmt(id) {
+        $("#rep").val(id)
+        showcmt()
+    }
+
+    function defcmt() {
+        $("#rep").val(-1)
+        showcmt()
+    }
+
+    function cmt() {
+        rep = $("#rep").val()
+        email = $("#email").val().replace(/\s+/g, "")
+        site = $("#site").val()
+        content = $("#content").val().replace(new RegExp('\n', "gm"), '<br/>').replace(new RegExp(' ', "gm"), '&nbsp;');
+        if (email == "") {
+            $("#email").focus()
+            $("#emailreq").html("请输入邮箱，以便在有人回复您时通知您")
+            $("#emailreq").show()
+        } else {
+            var regEmail = /^[a-zA-Z\d]+([-_\.][a-zA-Z\d]+)*@[a-zA-Z\d]+\.[a-zA-Z\d]{2,4}$/;
+            if (regEmail.test(email)) {
+                $("#emailreq").hide()
+                if (content == "" || content.length <= 6) {
+                    $("#content").focus()
+                    $("#cntreq").html("无内容或内容不符合要求，6-1000之间")
+                    $("#cntreq").show()
+                } else {
+                    $("#cntreq").hide()
+                    $("#subbtn").hide()
+                    $("#loadbtn").show()
+                    $.post("/addcmt", {
+                        blog:{{ blog.id }},
+                        email: email,
+                        content: content,
+                        rep: rep,
+                        site: site
+                    }, function (r) {
+                        r = eval("(" + r + ")")
+                        if (r.state == 1) {
+                            window.location.reload()
+                        } else {
+                            $("#cmterror").show()
+                            $("#subbtn").show()
+                            $("#loadbtn").hide()
+                        }
+                    })
+                }
+            } else {
+                $("#email").focus()
+                $("#emailreq").html("请输入正确邮箱")
+                $("#emailreq").show()
+            }
+        }
+    }
+
+    function showcmt() {
+        $("#cmt").modal()
+    }
+
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+
+    function gotop() {
+        $('html,body').animate({scrollTop: 0}, 150);
+    }
+
+    $(document).ready(function () {
+        $(document).scroll(function () {
+            height = parseInt(document.getElementById("toctop").clientHeight);//表示页面滚动到此高度是固定某侧边栏元素，一般是需要固定的侧边栏元素上方的总高度
+            var topHight = $(document).scrollTop();//页面滚动的高度
+            if (topHight < height) {
+                //页面滚动的高度未达到需要固定的高度
+                //lxbz是需要固定的元素
+                $("#toc").css({"position": '', "top": '', "z-index": ''});
+            } else {
+                //页面滚动的高度超过需要固定的高度，将position设置为fixed
+                $("#toc").css({"position": "fixed", "top": "10px", "z-index": "20"});
+            }
+            if (topHight == 0) {
+                //页面滚动的高度未达到需要固定的高度
+                //lxbz是需要固定的元素
+                $("#toc").css({"position": '', "top": '', "z-index": ''});
+            }
+            if (topHight > 400) {
+                $("#btntop").fadeIn(300)
+            } else {
+                $("#btntop").fadeOut(300)
+            }
+        });
+    });
+
+    function changeDivHeight() {
+        height = parseInt(document.getElementById("toctop").clientHeight);//表示页面滚动到此高度是固定某侧边栏元素，一般是需要固定的侧边栏元素上方的总高度
+        var topHight = $(document).scrollTop();//页面滚动的高度
+        if (topHight < height) {
+            //页面滚动的高度未达到需要固定的高度
+            //lxbz是需要固定的元素
+            $("#toc").css({"position": '', "top": '', "z-index": ''});
+        } else {
+            //页面滚动的高度超过需要固定的高度，将position设置为fixed
+            $("#toc").css({"position": "fixed", "top": "10px", "z-index": "20"});
+        }
+        if (topHight == 0 || topHight == null || topHight == undefined) {
+            //页面滚动的高度未达到需要固定的高度
+            //lxbz是需要固定的元素
+            $("#toc").css({"position": '', "top": '', "z-index": ''});
+        }
+        var w = document.documentElement.clientWidth;
+        if (w < 768) {
+            $("#left-main").show();
+            $("#right").hide();
+        } else {
+            $("#left-main").hide();
+            $("#right").show();
+        }
+        var h = document.documentElement.clientHeight;
+        document.getElementById("content-main").style.minHeight = h + "px";
+
+        if (topHight > 400) {
+            $("#btntop").fadeIn()
+        } else {
+            $("#btntop").fadeOut()
+        }
+    }
+</script>
+</body>
+</html>

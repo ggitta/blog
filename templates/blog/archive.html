@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>JAVAFENG</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/prism.css">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-12 p-3" id="content-main">
+            <p class="list-item">
+                <span class="title">Archive</span> [<a href="/">首页</a>]
+            </p>
+            <p class="list-item">
+            <hr/>
+            </p>
+            {% if dates %}
+                {% regroup dates by year as dates_by_year %}
+                {% for mouth in dates_by_year %}
+                    <!-- month 是一组月份列表 -->
+                    <!-- grouper 是组头，即某个月份列表的年份 -->
+                    <div class="arcyear">
+                        {{ mouth.grouper }} 年
+                        {% for d in mouth.list %}
+                            <!-- 再循环显示该年份组下的月份列表即可 -->
+                            <div class="arcmonth">
+                                {{ d |date:'m' }} 月
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="list-item">
+                    There is nothing!
+                </p>
+            {% endif %}
+            <hr>
+            <p class="list-item">
+                &copy;2019 JAVAFENG-津ICP备18005168号-2
+            </p>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/prism.js"></script>
+<script type="text/javascript">
+    function toggleSea() {
+        $("#rssp").fadeOut(0)
+        $("#seap").fadeToggle(100)
+    }
+
+    function toggleRss() {
+        $("#seap").fadeOut(0)
+        $("#rssp").fadeToggle(100)
+    }
+
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;//获取页面可见高度
+        document.getElementById("content-main").style.minHeight = h + "px";//掐头去尾，减去100px
+    }
+</script>
+</body>
+</html>

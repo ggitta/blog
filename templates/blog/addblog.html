@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>JAVAFENG</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/radio.scss">
+    <link rel="stylesheet" href="{% static "plugin/editormd/css/editormd.css" %}">
+    <link rel="stylesheet" href="/static/plugin/fonts/font-awesome/css/font-awesome.min.css">
+    <style>
+        .editormd-preview-close-btn {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container p-0">
+    <div class="row p-0 m-0">
+        <div class="col-12 p-3" id="content-main">
+            <p class="list-item">
+                发布文章&emsp;[<a href="/adminindex">管理首页</a>] [<a href="/adminarticles">文章管理</a>]
+            </p>
+            <p class="list-item">
+            <hr/>
+            </p>
+            <div>
+                <div class="mb-2">
+                    <div class="form-inline">
+                        <input class="form-control titleinput" id="title" name="title" type="text"
+                               placeholder="Title...">
+                        <a href="" data-toggle="modal" data-target="#option">发布文章</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id="test-editormd" class="editor">
+                        <textarea style="display: none" class="editormd-markdown-textarea" id="content"
+                                  name="content"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="option" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px !important;">
+            <div class="modal-body">
+                <h5>类型</h5>
+                <input name="category" id="category" list="browsers" class="form-control mb-3">
+                <datalist id="browsers">
+                    {% for cate in cates %}
+                        <option class="myoption">{{ cate.name }}</option>
+                    {% endfor %}
+                </datalist>
+                <h5>标签</h5>
+                {% for tag in tags %}
+                    <span class="jftag text-dsb mb-2 mr-2 cp">{{ tag }}</span>
+                {% endfor %}
+                <input type="text" id="tags" name="tags" class="form-control  mb-3" placeholder="“,”分隔和结尾">
+                <div class="text-right">
+                    <a class="text-dsb" id="subblog" class="mb-3">发布文章</a>
+                    <a href="" class="mb-3" data-toggle="modal" data-target="#option">取消</a>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px !important;">
+            <div class="modal-body">
+                <h3 class="mp-3" id="msg"></h3>
+                <div class="text-right">
+                    <a id="successbtn" class="text-dsb" href="" class="mb-3">好！</a>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script src="/static/js/jquery-3.4.1.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/plugin/editormd/editormd.js"></script>
+
+<script>
+    function hidemsg() {
+        $("#success").modal("hide");
+    }
+
+    function tal(a) {
+
+        if (a == 1) {
+            window.location.href = "/adminarticles"
+        } else {
+            $("#success").modal("hide")
+            $("#option").modal("hide")
+        }
+    }
+
+    $(".jftag").click(function () {
+        var text = $(this).text()
+        var tag = $("#tags").val()
+        tag += text + ","
+        $("#tags").val(tag)
+
+    })
+
+
+    window.onload = function () {
+        changeDivHeight();
+    }
+    window.onresize = function () {
+        changeDivHeight();
+    }
+
+    function changeDivHeight() {
+        var h = document.documentElement.clientHeight;//获取页面可见高度
+        document.getElementById("content-main").style.height = h + "px";//掐头去尾，减去100px
+    }
+
+    var editor;
+
+    $(function () {
+        var editor = editormd("test-editormd", {
+            path: "/static/plugin/editormd/lib/",
+
+            placeholder: "Content...",
+            codeFold: true,
+            searchReplace: true,
+            height: 666,
+            width: "100%",
+            saveHTMLToTextarea: true, //开启保存HTML文件
+            tex: true,   // 开启科学公式TeX语言支持，默认关闭
+            flowChart: true, // 开启流程图支持，默认关闭
+            sequenceDiagram: true, // 开启时序/序列图支持，默认关闭,
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/upload",
+            toolbarIcons: function () {
+                return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "reference-link", "table", "datetime", "pagebreak", "list-ul", "list-ol", "bold", "hr", "code-block", "image", "link", "|", "h4", "h5", "h6", "||", "watch", "fullscreen", "preview",]
+            },
+            onload: function () {
+                editormd.loadPlugin("/static/plugin/editormd/image-handle-paste", function () {
+                    editor.imagePaste();
+                });
+            }
+        });
+
+        $("#subblog").bind("click", function () {
+            let htmlCode = editor.getHTML();
+            console.log(htmlCode);
+
+            var title = $("#title").val()
+            var content = $("#content").val()
+            var htmlcontent = htmlCode
+            var category = $("#category").val()
+            var tags = $("#tags").val()
+            if (title == "" || content == "" || category == "" || tags == "") {
+                $("#option").modal("hide")
+                $("#msg").html("确认标题、内容、分类和标签是否填写完整")
+                $("#success").modal({backdrop: 'static', keyboard: false});
+                $("#successbtn").attr("href", "javascript:hidemsg()")
+            } else {
+                $.post("/addblog", {
+                    title: title,
+                    content: content,
+                    category: category,
+                    tags: tags,
+                    htmlcontent: htmlcontent
+                }, function (result) {
+                    result = eval("(" + result.toString() + ")")
+                    $("#msg").html(result.msg)
+                    $("#msg").show()
+                    $("#msg").html(result.msg)
+                    $("#option").modal("hide")
+                    $("#success").modal({backdrop: 'static', keyboard: false});
+                    $("#successbtn").attr("href", "javascript:tal(" + result.state + ")")
+                })
+            }
+        })
+
+    })
+
+</script>
+</body>
+</html>
