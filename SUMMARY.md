@@ -1,13 +1,4 @@
 # Table of contents
 
 * [记录崩溃的点滴\~](README.md)
-
-## The Company
-
-* [Vision and Values](the-company/vision-and-values.md)
-* [Meet the Team!](the-company/meet-the-team.md)
-
-## The Formal Stuff
-
-* [Requesting Time Off](the-formal-stuff/requesting-time-off.md)
-* [Filing Expenses](the-formal-stuff/filing-expenses.md)
+* [我的Java这么部署\~](wo-de-java-zhe-mo-bu-shu.md)
